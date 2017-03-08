@@ -17,6 +17,7 @@ public class CSVParser implements Parser {
     public Area parse(File file) {
         try {
             reader = new CSVReader(new FileReader(file));
+            String [] nextLine;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
