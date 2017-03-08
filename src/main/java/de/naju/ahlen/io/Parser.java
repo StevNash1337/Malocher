@@ -10,5 +10,5 @@ import java.io.File;
  */
 public interface Parser {
 
-    Area parse(File file);
+    Area parse(String name, File file);
 }
