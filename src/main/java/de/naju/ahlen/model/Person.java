@@ -13,9 +13,17 @@ public class Person {
     private String lastName;
     private String city;
     private int postCode;
-    private String street;
-    private String houseNumber;
-    private List<Operation> operations = new ArrayList<Operation>();
+    private String address;
+    private List<Operation> operations = new ArrayList<>();
+
+    public Person() {
+        this.firstName = "";
+        this.lastName = "";
+        this.city = "";
+        this.postCode = -1;
+        this.address = "";
+        this.operations = new ArrayList<>();
+    }
 
     public String getFirstName() {
         return firstName;
@@ -49,20 +57,12 @@ public class Person {
         this.postCode = postCode;
     }
 
-    public String getStreet() {
-        return street;
+    public String getAddress() {
+        return address;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public List<Operation> getOperations() {

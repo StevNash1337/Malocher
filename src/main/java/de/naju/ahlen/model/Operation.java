@@ -8,8 +8,14 @@ import java.util.Date;
 public class Operation {
 
     private Date date;
-    private float duraton;
+    private float duration;
     private String comment;
+
+    public Operation() {
+        this.date = new Date();
+        this.duration = 0;
+        this.comment = "";
+    }
 
     public Date getDate() {
         return date;
@@ -19,12 +25,12 @@ public class Operation {
         this.date = date;
     }
 
-    public float getDuraton() {
-        return duraton;
+    public float getDuration() {
+        return duration;
     }
 
-    public void setDuraton(float duraton) {
-        this.duraton = duraton;
+    public void setDuration(float duration) {
+        this.duration = duration;
     }
 
     public String getComment() {

@@ -10,7 +10,13 @@ public class Area {
 
     private String name;
     private float hours;
-    private List<Person> persons = new ArrayList<Person>();
+    private List<Person> persons = new ArrayList<>();
+
+    public Area() {
+        this.name = "";
+        this.hours = 0;
+        this.persons = new ArrayList<>();
+    }
 
     public String getName() {
         return name;
