@@ -20,6 +20,7 @@ public class Main {
             System.out.println("Absoluter Pfad der .csv Datei mit den Adressen");
             return;
         }
+        // Check if File has the right extension
         if(!FilenameUtils.getExtension(args[1]).equals("csv")){
             System.out.println("Die Datei mit den Stunden ist nicht im .csv Format.");
             return;
