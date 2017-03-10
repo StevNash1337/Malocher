@@ -1,12 +1,13 @@
 package de.naju.ahlen.model;
 
-/**
- * Created by Steffen on 08.03.2017.
- */
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Steffen on 08.03.2017.
+ */
 public class Person {
 
     private String firstName;
@@ -14,7 +15,7 @@ public class Person {
     private String city;
     private int postCode;
     private String address;
-    private List<Operation> operations = new ArrayList<>();
+    private List<Operation> operations;
 
     public Person() {
         this.firstName = "";
