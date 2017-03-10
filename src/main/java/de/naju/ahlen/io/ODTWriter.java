@@ -44,6 +44,8 @@ public class ODTWriter implements Writer{
 
     @Override
     public void write(Area area) {
+        // TODO create mapping from variable_name to content
+        // TODO fill out tables
         writeVariables(docCashPayment);
         writeVariables(docDonation);
         writeVariables(docOperation);

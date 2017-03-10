@@ -2,6 +2,7 @@ package de.naju.ahlen.main;
 
 import de.naju.ahlen.io.CSVParser;
 import de.naju.ahlen.io.ODTWriter;
+import de.naju.ahlen.io.Parser;
 import de.naju.ahlen.io.Writer;
 import de.naju.ahlen.model.Area;
 import org.apache.commons.io.FilenameUtils;
@@ -37,7 +38,7 @@ public class Main {
         }
 
 
-        CSVParser parser = new CSVParser();
+        Parser parser = new CSVParser();
         System.out.println("Name des Gebiets: " + args[0]);
         System.out.println("Stunden: " + args[1]);
         System.out.println("Adressen: " + args[2]);
