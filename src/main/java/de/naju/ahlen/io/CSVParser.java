@@ -25,10 +25,10 @@ public class CSVParser implements Parser {
     /**
      * Read addresses and than the matrix with working hours per person and the dates of every operation
      *
-     * @param name
-     * @param fileHours
-     * @param fileAddresses
-     * @return
+     * @param name Name des NSG
+     * @param fileHours .csv Datei mit den Stunden der Person pro Einsatz und dem Datum jedes Einsatzes
+     * @param fileAddresses .csv Datei mit den Namen und Adressen aller Personen die dort mitgearbeitet haben
+     * @return Area Objekt mit allen Daten
      */
     public Area parse(String name, File fileHours, File fileAddresses) {
         // Read addresses

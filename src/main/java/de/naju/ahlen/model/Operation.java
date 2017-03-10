@@ -40,4 +40,15 @@ public class Operation {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        return sb.append("Datum: ")
+                .append(date.toString())
+                .append("; Dauer: ")
+                .append(duration)
+                .append("; Kommentar: ")
+                .append(comment)
+                .toString();
+    }
 }

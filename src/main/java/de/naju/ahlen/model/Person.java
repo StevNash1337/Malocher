@@ -72,4 +72,23 @@ public class Person {
     public void setOperations(List<Operation> operations) {
         this.operations = operations;
     }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Vorname: ")
+                .append(firstName)
+                .append("; Nachname: ")
+                .append(lastName)
+                .append("; Adresse: ")
+                .append(address)
+                .append("; PLZ: ")
+                .append(postCode)
+                .append("; Stadt: ")
+                .append(city)
+                .append("\nEinsätze: ");
+        for(Operation o : operations){
+            sb.append("\n\t").append(o.toString());
+        }
+        return sb.toString();
+    }
 }

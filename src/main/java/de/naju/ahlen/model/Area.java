@@ -41,4 +41,17 @@ public class Area {
     public void setPersons(List<Person> persons) {
         this.persons = persons;
     }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Name des Gebiets: ")
+                .append(name)
+                .append("; geleistete Stunden: ")
+                .append(hours)
+                .append("\nBeteiligte Personen: ");
+        for(Person p : persons){
+            sb.append("\n\t").append(p.toString());
+        }
+        return sb.toString();
+    }
 }
