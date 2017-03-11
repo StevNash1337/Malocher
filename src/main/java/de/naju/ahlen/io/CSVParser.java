@@ -30,35 +30,11 @@ public class CSVParser implements Parser {
      * @param fileAddresses .csv Datei mit den Namen und Adressen aller Personen die dort mitgearbeitet haben
      * @return Area Objekt mit allen Daten
      */
+    @Override
     public Area parse(String name, File fileHours, File fileAddresses) {
         // Read addresses
         List<Person> persons = new ArrayList<>();
-        try {
-            reader = new CSVReader(new FileReader(fileAddresses), '\t');
-            String[] nextLine;
-            while ((nextLine = reader.readNext()) != null) {
-                Person person = new Person();
-                if (!(nextLine[0].isEmpty())) {
-                    person.setFirstName(nextLine[0]);
-                }
-                if (!(nextLine[1].isEmpty())) {
-                    person.setLastName(nextLine[1]);
-                }
-                if (!(nextLine[2].isEmpty())) {
-                    person.setAddress(nextLine[2]);
-                }
-                if (!(nextLine[3].isEmpty())) {
-                    person.setPostCode(Integer.parseInt(nextLine[3]));
-                }
-                if (!(nextLine[4].isEmpty())) {
-                    person.setCity(nextLine[4]);
-                }
-                persons.add(person);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        extractPersonalData(persons, fileAddresses);
 
         // Read hour matrix
         Area area = new Area();
@@ -95,6 +71,7 @@ public class CSVParser implements Parser {
                 if (!(nextLine[0].equals("Name")) && !(nextLine[0].equals(""))) {
                     Person person = new Person();
                     // TODO: genauere Abfrage, Personen könnten gleichen Vornamen haben
+                    // Person p aus Personen, welche bereits über die Adressen.csv eingelesen wurden, rausfiltern
                     for (Person p : persons) {
                         if (p.getFirstName().equals(nextLine[0])) {
                             person = p;
@@ -107,9 +84,16 @@ public class CSVParser implements Parser {
                         Operation op = new Operation();
                         // Das erste Element der Datumsliste ist in der zweiten Spalte von nextLine, daher i-1
                         op.setDate(listOperationDates.get(i-1));
-                        op.setDuration(Integer.parseInt(nextLine[i]));
+                        String duration = nextLine[i];
+                        if(duration.contains(",")){
+                            duration = duration.replace(",", ".");
+                        }
+                        op.setDuration(Float.parseFloat(duration));
                         op.setComment("");
                         person.getOperations().add(op);
+
+                        // Set duration in Area
+                        area.setHours(area.getHours() + Float.parseFloat(duration));
                     }
                     area.getPersons().add(person);
                 }
@@ -118,5 +102,35 @@ public class CSVParser implements Parser {
             e.printStackTrace();
         }
         return area;
+    }
+
+    public List<Person> extractPersonalData(List<Person> persons, File fileAddresses){
+        try {
+            reader = new CSVReader(new FileReader(fileAddresses), '\t');
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                Person person = new Person();
+                if (!(nextLine[0].isEmpty())) {
+                    person.setFirstName(nextLine[0]);
+                }
+                if (!(nextLine[1].isEmpty())) {
+                    person.setLastName(nextLine[1]);
+                }
+                if (!(nextLine[2].isEmpty())) {
+                    person.setAddress(nextLine[2]);
+                }
+                if (!(nextLine[3].isEmpty())) {
+                    person.setPostCode(Integer.parseInt(nextLine[3]));
+                }
+                if (!(nextLine[4].isEmpty())) {
+                    person.setCity(nextLine[4]);
+                }
+                persons.add(person);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return persons;
     }
 }

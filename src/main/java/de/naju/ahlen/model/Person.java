@@ -18,11 +18,11 @@ public class Person {
     private List<Operation> operations;
 
     public Person() {
-        this.firstName = "";
-        this.lastName = "";
-        this.city = "";
+        this.firstName = "Unknown";
+        this.lastName = "Unknown";
+        this.city = "Unknown";
         this.postCode = -1;
-        this.address = "";
+        this.address = "Unknown";
         this.operations = new ArrayList<>();
     }
 

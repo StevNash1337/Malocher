@@ -50,7 +50,10 @@ public class Area {
                 .append(hours)
                 .append("\nBeteiligte Personen: ");
         for(Person p : persons){
+            sb.append("\n\n");
+            sb.append("------------------------------------------------------------------------");
             sb.append("\n\t").append(p.toString());
+            sb.append("\n------------------------------------------------------------------------");
         }
         return sb.toString();
     }

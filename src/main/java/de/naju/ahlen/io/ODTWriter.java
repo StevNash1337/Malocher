@@ -21,18 +21,21 @@ public class ODTWriter implements Writer{
     private final String VARIABLE_NODE_NAME = "text:variable-set";
     private final String VARIABLE_NODE_CONTENT = "text:name";
 
+    private String outputFolder;
+
     private OdfTextDocument docCashPayment;
     private OdfTextDocument docDonation;
     private OdfTextDocument docOperation;
 
     /**
-     *
+     * @param outputFolder Folder for output files
      * @param fileCashPayment odt template for cash payments
      * @param fileDonation odt template for donations
      * @param fileOperation odt template for operations
      */
 
-    public ODTWriter(File fileCashPayment, File fileDonation, File fileOperation) {
+    public ODTWriter(String outputFolder, File fileCashPayment, File fileDonation, File fileOperation) {
+        this.outputFolder = outputFolder;
         try {
             docCashPayment = OdfTextDocument.loadDocument(fileCashPayment);
             docDonation = OdfTextDocument.loadDocument(fileDonation);

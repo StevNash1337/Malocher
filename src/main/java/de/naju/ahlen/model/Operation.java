@@ -1,5 +1,7 @@
 package de.naju.ahlen.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,14 +9,17 @@ import java.util.Date;
  */
 public class Operation {
 
+    // TODO: Ich glaube Date läuft bald aus. Calender ist glaube ich der neue heiße Scheiß!
     private Date date;
     private float duration;
     private String comment;
+    private SimpleDateFormat sdf;
 
     public Operation() {
         this.date = new Date();
         this.duration = 0;
         this.comment = "";
+        sdf = new SimpleDateFormat("dd.MM.yy");
     }
 
     public Date getDate() {
@@ -44,7 +49,7 @@ public class Operation {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         return sb.append("Datum: ")
-                .append(date.toString())
+                .append(sdf.format(date))
                 .append("; Dauer: ")
                 .append(duration)
                 .append("; Kommentar: ")
