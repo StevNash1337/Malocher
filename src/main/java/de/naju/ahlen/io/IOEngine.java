@@ -31,13 +31,18 @@ public class IOEngine {
         this.guiController = guiController;
     }
 
-    public void readData(){
+    public void readAndWriteData(){
+        readData();
+        writeData();
+    }
+
+    private void readData(){
         parser = new CSVParser();
         area = parser.parse(name, hours, addresses);
         System.out.println(area.toString());
     }
 
-    public void writeData(){
+    private void writeData(){
         writer = new ODTWriter(outputFolder, fileCashPayment, fileDonation, fileOperationOverview, fileOperation);
         writer.write(new Area());
     }

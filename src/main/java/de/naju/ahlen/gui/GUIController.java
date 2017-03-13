@@ -3,6 +3,7 @@ package de.naju.ahlen.gui;
 import de.naju.ahlen.io.IOEngine;
 
 import javax.swing.*;
+import java.io.File;
 
 /**
  * Created by Steffen on 11.03.2017.
@@ -24,33 +25,49 @@ public class GUIController {
             // handle exception
         }
 
-        this.window = new Window();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                window = new Window();
+            }
+        }); // Erzeugt einen neuen Thread, der eine Instanz von TestJFrame erzeugt
+        //this.window = new Window();
         this.menuPanel = new MenuPanel(this);
         window.add(menuPanel);
+
+        window.revalidate();
+        window.repaint();
     }
 
-    public void hoursButtonPressed(){
-
+    public void nameNSG(String name){
+        ioEngine.setName(name);
     }
 
-    public void addressesButtonPressed(){
-
+    public void hoursButtonPressed(File file){
+        ioEngine.setHours(file);
     }
 
-    public void outputFolderButtonPressed(){
-
+    public void addressesButtonPressed(File file){
+        ioEngine.setAddresses(file);
     }
 
-    public void fileCashPaymentButtonPressed(){
-
+    public void outputFolderButtonPressed(String path){
+        ioEngine.setOutputFolder(path);
     }
 
-    public void fileDonationButtonPressed(){
-
+    public void fileCashPaymentButtonPressed(File file){
+        ioEngine.setFileCashPayment(file);
     }
 
-    public void fileOperationButtonPressed(){
+    public void fileDonationButtonPressed(File file){
+        ioEngine.setFileDonation(file);
+    }
 
+    public void fileOperationButtonPressed(File file){
+        ioEngine.setFileOperation(file);
+    }
+
+    public void fileOperationOverviewButtonPressed(File file){
+        ioEngine.setFileOperationOverview(file);
     }
 
     public Window getWindow() {
@@ -74,5 +91,6 @@ public class GUIController {
     }
 
     public void processButtonPressed() {
+        ioEngine.readAndWriteData();
     }
 }

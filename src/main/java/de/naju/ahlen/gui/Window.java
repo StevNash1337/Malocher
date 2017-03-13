@@ -8,7 +8,7 @@ import javax.swing.*;
 public class Window extends JFrame {
 
     public Window(){
-        this.setSize(800, 600);
+        this.setSize(706, 300);
         this.setTitle("Stundenabrechnung - Malocher v0.2");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);

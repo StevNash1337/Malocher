@@ -61,6 +61,7 @@ public class MenuPanel extends JPanel {
 
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setAcceptAllFileFilterUsed(false);
 
         // Labels
         lName = new JLabel("Name des NSG");
@@ -69,7 +70,8 @@ public class MenuPanel extends JPanel {
         lOutputFolder = new JLabel("Pfad für den Output");
         lFileCashPayment = new JLabel("Vorlage für die Barauszahlung");
         lFileDonation = new JLabel("Vorlage für die Barspende");
-        lFileOperationOverview = new JLabel("Vorlage für den Tagesnachweis");
+        // TODO: Sind die beiden so richtig? Geht aus den Variablennamen nicht so gut hervor
+        lFileOperationOverview = new JLabel("Vorlage für den Stundennachweis");
         lFileOperation = new JLabel("Vorlage für den Tagesnachweis");
 
         // Textfelder
@@ -94,12 +96,14 @@ public class MenuPanel extends JPanel {
         bHours.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.resetChoosableFileFilters();
                 fileChooser.setFileFilter(CSVfilter);
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tHours.setText(selectedFile.getAbsolutePath());
+                    guiController.hoursButtonPressed(selectedFile);
                 }
             }
         });
@@ -108,11 +112,14 @@ public class MenuPanel extends JPanel {
         bAddresses.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.resetChoosableFileFilters();
                 fileChooser.setFileFilter(CSVfilter);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.FILES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tAddresses.setText(selectedFile.getAbsolutePath());
+                    guiController.addressesButtonPressed(selectedFile);
                 }
             }
         });
@@ -121,11 +128,12 @@ public class MenuPanel extends JPanel {
         bOutputFolder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooser.setFileFilter(null);
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.resetChoosableFileFilters();
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.DIRECTORIES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     tOutputFolder.setText(fileChooser.getCurrentDirectory().toString());
+                    guiController.outputFolderButtonPressed(fileChooser.getCurrentDirectory().toString());
                 }
             }
         });
@@ -134,11 +142,14 @@ public class MenuPanel extends JPanel {
         bFileCashPayment.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.resetChoosableFileFilters();
                 fileChooser.setFileFilter(ODTfilter);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.FILES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileCashPayment.setText(selectedFile.getAbsolutePath());
+                    guiController.fileCashPaymentButtonPressed(selectedFile);
                 }
             }
         });
@@ -147,11 +158,14 @@ public class MenuPanel extends JPanel {
         bFileDonation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.resetChoosableFileFilters();
                 fileChooser.setFileFilter(ODTfilter);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.FILES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileDonation.setText(selectedFile.getAbsolutePath());
+                    guiController.fileDonationButtonPressed(selectedFile);
                 }
             }
         });
@@ -160,11 +174,14 @@ public class MenuPanel extends JPanel {
         bFileOperationOverview.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.resetChoosableFileFilters();
                 fileChooser.setFileFilter(ODTfilter);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.FILES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileOperationOverview.setText(selectedFile.getAbsolutePath());
+                    guiController.fileOperationOverviewButtonPressed(selectedFile);
                 }
             }
         });
@@ -173,11 +190,14 @@ public class MenuPanel extends JPanel {
         bFileOperation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.resetChoosableFileFilters();
                 fileChooser.setFileFilter(ODTfilter);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.FILES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileOperation.setText(selectedFile.getAbsolutePath());
+                    guiController.fileOperationButtonPressed(selectedFile);
                 }
             }
         });
@@ -186,12 +206,12 @@ public class MenuPanel extends JPanel {
         bFileOperation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                guiController.nameNSG(tName.getText());
                 guiController.processButtonPressed();
             }
         });
 
         addComponents();
-        repaint();
     }
 
     public void addComponents(){
