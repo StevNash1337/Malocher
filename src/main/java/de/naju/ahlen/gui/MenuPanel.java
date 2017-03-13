@@ -5,7 +5,6 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -161,6 +160,9 @@ public class MenuPanel extends JPanel {
         repaint();
     }
 
+    /**
+     * penis
+     */
     public void addComponents(){
         this.add(lName);
         this.add(tName, "wrap, w 200!");
