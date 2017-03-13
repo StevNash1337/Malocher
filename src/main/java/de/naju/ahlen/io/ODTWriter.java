@@ -25,21 +25,24 @@ public class ODTWriter implements Writer{
 
     private OdfTextDocument docCashPayment;
     private OdfTextDocument docDonation;
+    private OdfTextDocument docOperationOverview;
     private OdfTextDocument docOperation;
 
     /**
      * @param outputFolder Folder for output files
      * @param fileCashPayment odt template for cash payments
      * @param fileDonation odt template for donations
+     * @param fileOperationOverview odt template for overview of operations
      * @param fileOperation odt template for operations
      */
 
-    public ODTWriter(String outputFolder, File fileCashPayment, File fileDonation, File fileOperation) {
+    public ODTWriter(String outputFolder, File fileCashPayment, File fileDonation, File fileOperationOverview, File fileOperation) {
         this.outputFolder = outputFolder;
         try {
             docCashPayment = OdfTextDocument.loadDocument(fileCashPayment);
             docDonation = OdfTextDocument.loadDocument(fileDonation);
             docOperation = OdfTextDocument.loadDocument(fileOperation);
+            docOperationOverview = OdfTextDocument.loadDocument(fileOperationOverview);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,6 +54,7 @@ public class ODTWriter implements Writer{
         // TODO fill out tables
         writeVariables(docCashPayment);
         writeVariables(docDonation);
+        writeVariables(docOperationOverview);
         writeVariables(docOperation);
     }
 

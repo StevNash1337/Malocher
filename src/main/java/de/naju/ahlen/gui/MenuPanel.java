@@ -28,6 +28,7 @@ public class MenuPanel extends JPanel {
     private JLabel lOutputFolder;
     private JLabel lFileCashPayment;
     private JLabel lFileDonation;
+    private JLabel lFileOperationOverview;
     private JLabel lFileOperation;
 
     private JTextField tName;
@@ -36,6 +37,7 @@ public class MenuPanel extends JPanel {
     private JTextField tOutputFolder;
     private JTextField tFileCashPayment;
     private JTextField tFileDonation;
+    private JTextField tFileOperationOverview;
     private JTextField tFileOperation;
 
     private JButton bHours;
@@ -43,6 +45,7 @@ public class MenuPanel extends JPanel {
     private JButton bOutputFolder;
     private JButton bFileCashPayment;
     private JButton bFileDonation;
+    private JButton bFileOperationOverview;
     private JButton bFileOperation;
 
     public MenuPanel(GUIController guiController){
@@ -63,6 +66,7 @@ public class MenuPanel extends JPanel {
         lOutputFolder = new JLabel("Pfad für den Output");
         lFileCashPayment = new JLabel("Vorlage für die Barauszahlung");
         lFileDonation = new JLabel("Vorlage für die Barspende");
+        lFileOperationOverview = new JLabel("Vorlage für die Zusammenfassung der Arbeiten");
         lFileOperation = new JLabel("Vorlage für den Tagesnachweis");
 
         // Textfelder
@@ -77,6 +81,8 @@ public class MenuPanel extends JPanel {
         tFileCashPayment.setEditable(false);
         tFileDonation = new JTextField();
         tFileDonation.setEditable(false);
+        tFileOperationOverview = new JTextField();
+        tFileOperationOverview.setEditable(false);
         tFileOperation = new JTextField();
         tFileOperation.setEditable(false);
 
@@ -145,6 +151,19 @@ public class MenuPanel extends JPanel {
             }
         });
 
+        bFileOperationOverview = new JButton("Öffnen");
+        bFileOperationOverview.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileChooser.addChoosableFileFilter(ODTfilter);
+                int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
+                if (returnValue == JFileChooser.FILES_ONLY) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    tFileOperationOverview.setText(selectedFile.getAbsolutePath());
+                }
+            }
+        });
+
         bFileOperation = new JButton("Öffnen");
         bFileOperation.addActionListener(new ActionListener() {
             @Override
@@ -184,6 +203,10 @@ public class MenuPanel extends JPanel {
         this.add(lFileDonation);
         this.add(tFileDonation);
         this.add(bFileDonation, "wrap");
+
+        this.add(lFileOperationOverview);
+        this.add(tFileOperationOverview);
+        this.add(bFileOperationOverview, "wrap");
 
         this.add(lFileOperation);
         this.add(tFileOperation);
