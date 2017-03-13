@@ -16,6 +16,8 @@ public class MenuPanel extends JPanel {
 
     private final GUIController guiController;
 
+    private int textFieldWidth;
+
     private final FileFilter CSVfilter;
     private final FileFilter ODTfilter;
 
@@ -50,7 +52,8 @@ public class MenuPanel extends JPanel {
 
     public MenuPanel(GUIController guiController){
         this.guiController = guiController;
-        MigLayout layout = new MigLayout("debug");
+        textFieldWidth = 450;
+        MigLayout layout = new MigLayout();
         setLayout(layout);
 
         CSVfilter = new FileNameExtensionFilter("CSV","csv");
@@ -66,7 +69,7 @@ public class MenuPanel extends JPanel {
         lOutputFolder = new JLabel("Pfad für den Output");
         lFileCashPayment = new JLabel("Vorlage für die Barauszahlung");
         lFileDonation = new JLabel("Vorlage für die Barspende");
-        lFileOperationOverview = new JLabel("Vorlage für die Zusammenfassung der Arbeiten");
+        lFileOperationOverview = new JLabel("Vorlage für den Tagesnachweis");
         lFileOperation = new JLabel("Vorlage für den Tagesnachweis");
 
         // Textfelder
@@ -91,7 +94,7 @@ public class MenuPanel extends JPanel {
         bHours.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.addChoosableFileFilter(CSVfilter);
+                fileChooser.setFileFilter(CSVfilter);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.FILES_ONLY) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -104,7 +107,7 @@ public class MenuPanel extends JPanel {
         bAddresses.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.addChoosableFileFilter(CSVfilter);
+                fileChooser.setFileFilter(CSVfilter);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.FILES_ONLY) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -117,7 +120,8 @@ public class MenuPanel extends JPanel {
         bOutputFolder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //fileChooser.addChoosableFileFilter(CSVfilter);
+                //fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.setFileFilter(null);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.DIRECTORIES_ONLY) {
                     tOutputFolder.setText(fileChooser.getCurrentDirectory().toString());
@@ -129,7 +133,7 @@ public class MenuPanel extends JPanel {
         bFileCashPayment.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.addChoosableFileFilter(ODTfilter);
+                fileChooser.setFileFilter(ODTfilter);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.FILES_ONLY) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -142,7 +146,7 @@ public class MenuPanel extends JPanel {
         bFileDonation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.addChoosableFileFilter(ODTfilter);
+                fileChooser.setFileFilter(ODTfilter);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.FILES_ONLY) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -155,7 +159,7 @@ public class MenuPanel extends JPanel {
         bFileOperationOverview.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.addChoosableFileFilter(ODTfilter);
+                fileChooser.setFileFilter(ODTfilter);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.FILES_ONLY) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -168,7 +172,7 @@ public class MenuPanel extends JPanel {
         bFileOperation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.addChoosableFileFilter(ODTfilter);
+                fileChooser.setFileFilter(ODTfilter);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.FILES_ONLY) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -189,39 +193,36 @@ public class MenuPanel extends JPanel {
         repaint();
     }
 
-    /**
-     * penis
-     */
     public void addComponents(){
         this.add(lName);
         this.add(tName, "wrap, w 200!");
 
         this.add(lHours);
-        this.add(tHours);
+        this.add(tHours, "w " + textFieldWidth + "!");
         this.add(bHours, "wrap");
 
         this.add(lAddresses);
-        this.add(tAddresses);
+        this.add(tAddresses, "w " + textFieldWidth + "!");
         this.add(bAddresses, "wrap");
 
         this.add(lOutputFolder);
-        this.add(tOutputFolder);
+        this.add(tOutputFolder, "w " + textFieldWidth + "!");
         this.add(bOutputFolder, "wrap");
 
         this.add(lFileCashPayment);
-        this.add(tFileCashPayment);
+        this.add(tFileCashPayment, "w " + textFieldWidth + "!");
         this.add(bFileCashPayment, "wrap");
 
         this.add(lFileDonation);
-        this.add(tFileDonation);
+        this.add(tFileDonation, "w " + textFieldWidth + "!");
         this.add(bFileDonation, "wrap");
 
         this.add(lFileOperationOverview);
-        this.add(tFileOperationOverview);
+        this.add(tFileOperationOverview, "w " + textFieldWidth + "!");
         this.add(bFileOperationOverview, "wrap");
 
         this.add(lFileOperation);
-        this.add(tFileOperation);
+        this.add(tFileOperation, "w " + textFieldWidth + "!");
         this.add(bFileOperation, "wrap");
 
         this.add(bProcess, "wrap");
