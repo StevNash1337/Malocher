@@ -95,8 +95,9 @@ public class MenuPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fileChooser.setFileFilter(CSVfilter);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
-                if (returnValue == JFileChooser.FILES_ONLY) {
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     tHours.setText(selectedFile.getAbsolutePath());
                 }
