@@ -17,13 +17,14 @@ public class Main {
 
 
         // Check File extension
-        if(args.length != 3){
+        if(args.length != 7){
             System.out.println("Falsche Eingabe! Bitte folgendes Schema beachten:");
             System.out.println("Name des Gebiets");
             System.out.println("Absoluter Pfad der .csv Datei mit den Stunden");
             System.out.println("Absoluter Pfad der .csv Datei mit den Adressen");
             System.out.println("Absoluter Pfad der .odt Datei mit den Barauszahlungen");
             System.out.println("Absoluter Pfad der .odt Datei mit den Barspenden");
+            System.out.println("Absoluter Pfad der .odt Datei mit den Übersicht zu Stundenachweisen");
             System.out.println("Absoluter Pfad der .odt Datei mit den Stundenachweisen");
             return;
         }
@@ -45,7 +46,8 @@ public class Main {
 
         System.out.println("Vorlage Barauszahlung: " + args[3]);
         System.out.println("Vorlage Barspende: " + args[4]);
-        System.out.println("Vorlage Arbeitsnachweise: " + args[5]);
+        System.out.println("Vorlage Übersicht Arbeitsnachweise: " + args[5]);
+        System.out.println("Vorlage Arbeitsnachweise: " + args[6]);
 
 
     }

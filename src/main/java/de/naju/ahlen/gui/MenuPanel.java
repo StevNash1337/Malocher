@@ -47,6 +47,7 @@ public class MenuPanel extends JPanel {
     private JButton bFileDonation;
     private JButton bFileOperationOverview;
     private JButton bFileOperation;
+    private JButton bProcess;
 
     public MenuPanel(GUIController guiController){
         this.guiController = guiController;
@@ -176,6 +177,15 @@ public class MenuPanel extends JPanel {
                 }
             }
         });
+
+        bProcess = new JButton("Verarbeiten");
+        bFileOperation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiController.processButtonPressed();
+            }
+        });
+
         addComponents();
         repaint();
     }
@@ -211,5 +221,7 @@ public class MenuPanel extends JPanel {
         this.add(lFileOperation);
         this.add(tFileOperation);
         this.add(bFileOperation, "wrap");
+
+        this.add(bProcess, "wrap");
     }
 }
