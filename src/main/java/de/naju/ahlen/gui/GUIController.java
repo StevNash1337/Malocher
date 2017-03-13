@@ -72,4 +72,7 @@ public class GUIController {
     public void setIoEngine(IOEngine ioEngine) {
         this.ioEngine = ioEngine;
     }
+
+    public void processButtonPressed() {
+    }
 }

@@ -22,6 +22,7 @@ public class IOEngine {
     private String outputFolder;
     private File fileCashPayment;
     private File fileDonation;
+    private File fileOperationOverview;
     private File fileOperation;
 
     private Area area;
@@ -37,7 +38,7 @@ public class IOEngine {
     }
 
     public void writeData(){
-        writer = new ODTWriter(outputFolder, fileCashPayment, fileDonation, fileOperation);
+        writer = new ODTWriter(outputFolder, fileCashPayment, fileDonation, fileOperationOverview, fileOperation);
         writer.write(new Area());
     }
 
@@ -79,6 +80,14 @@ public class IOEngine {
 
     public void setFileDonation(File fileDonation) {
         this.fileDonation = fileDonation;
+    }
+
+    public File getFileOperationOverview() {
+        return fileOperationOverview;
+    }
+
+    public void setFileOperationOverview(File fileOperationOverview) {
+        this.fileOperationOverview = fileOperationOverview;
     }
 
     public File getFileOperation() {

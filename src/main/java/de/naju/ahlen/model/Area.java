@@ -1,7 +1,6 @@
 package de.naju.ahlen.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Steffen on 08.03.2017.
@@ -40,6 +39,23 @@ public class Area {
 
     public void setPersons(List<Person> persons) {
         this.persons = persons;
+    }
+
+    public Map<Date, Float> getHoursByDate() {
+        Map<Date, Float> result = new HashMap<>();
+
+        for (Person p : persons) {
+            for (Operation o : p.getOperations()) {
+                Date date = o.getDate();
+                float duration = o.getDuration();
+                if (!result.containsKey(date)) {
+                    result.put(date, duration);
+                } else {
+                    result.put(date, result.get(date) + duration);
+                }
+            }
+        }
+        return result;
     }
 
     public String toString(){
