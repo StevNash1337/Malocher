@@ -3,6 +3,8 @@ package de.naju.ahlen.gui;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
@@ -76,6 +78,29 @@ public class MenuPanel extends JPanel {
 
         // Textfelder
         tName = new JTextField();
+        tName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                guiController.nameNSG(tName.getText());
+                guiController.validateAllData();
+                System.out.println("tName Insert");
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                guiController.nameNSG(tName.getText());
+                guiController.validateAllData();
+                System.out.println("tName Remove");
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                guiController.nameNSG(tName.getText());
+                guiController.validateAllData();
+                System.out.println("tName Change");
+        }
+        });
+
         tHours = new JTextField();
         tHours.setEditable(false);
         tAddresses = new JTextField();
@@ -121,6 +146,7 @@ public class MenuPanel extends JPanel {
                     File selectedFile = fileChooser.getSelectedFile();
                     tAddresses.setText(selectedFile.getAbsolutePath());
                     guiController.addressesButtonPressed(selectedFile);
+                    guiController.validateAllData();
                 }
             }
         });
@@ -129,12 +155,14 @@ public class MenuPanel extends JPanel {
         bOutputFolder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooser.resetChoosableFileFilters();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int returnValue = fileChooser.showOpenDialog(MenuPanel.this);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    tOutputFolder.setText(fileChooser.getCurrentDirectory().toString());
-                    guiController.outputFolderButtonPressed(fileChooser.getCurrentDirectory().toString());
+                    tOutputFolder.setText(fileChooser.getSelectedFile().toString());
+                    fileChooser.setCurrentDirectory(fileChooser.getSelectedFile());
+                    guiController.outputFolderButtonPressed(fileChooser.getSelectedFile().toString());
+                    guiController.validateAllData();
                 }
             }
         });
@@ -151,6 +179,7 @@ public class MenuPanel extends JPanel {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileCashPayment.setText(selectedFile.getAbsolutePath());
                     guiController.fileCashPaymentButtonPressed(selectedFile);
+                    guiController.validateAllData();
                 }
             }
         });
@@ -167,6 +196,7 @@ public class MenuPanel extends JPanel {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileDonation.setText(selectedFile.getAbsolutePath());
                     guiController.fileDonationButtonPressed(selectedFile);
+                    guiController.validateAllData();
                 }
             }
         });
@@ -183,6 +213,7 @@ public class MenuPanel extends JPanel {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileOperationOverview.setText(selectedFile.getAbsolutePath());
                     guiController.fileOperationOverviewButtonPressed(selectedFile);
+                    guiController.validateAllData();
                 }
             }
         });
@@ -199,6 +230,8 @@ public class MenuPanel extends JPanel {
                     File selectedFile = fileChooser.getSelectedFile();
                     tFileOperation.setText(selectedFile.getAbsolutePath());
                     guiController.fileOperationButtonPressed(selectedFile);
+                    guiController.validateAllData();
+                    guiController.printTest();
                 }
             }
         });
