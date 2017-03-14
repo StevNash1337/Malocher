@@ -104,6 +104,7 @@ public class MenuPanel extends JPanel {
                     File selectedFile = fileChooser.getSelectedFile();
                     tHours.setText(selectedFile.getAbsolutePath());
                     guiController.hoursButtonPressed(selectedFile);
+                    guiController.validateAllData();
                 }
             }
         });
@@ -203,10 +204,16 @@ public class MenuPanel extends JPanel {
         });
 
         bProcess = new JButton("Verarbeiten");
+        bProcess.setEnabled(false);
         bFileOperation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiController.nameNSG(tName.getText());
+                boolean valid = guiController.validateAllData();
+                if(!valid){
+                    guiController.createErrorMessege();
+                    return;
+                }
                 guiController.processButtonPressed();
             }
         });
@@ -247,5 +254,9 @@ public class MenuPanel extends JPanel {
         this.add(bFileOperation, "wrap");
 
         this.add(bProcess, "wrap");
+    }
+
+    public JButton getbProcess() {
+        return bProcess;
     }
 }

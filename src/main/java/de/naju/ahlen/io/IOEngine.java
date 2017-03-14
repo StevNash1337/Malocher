@@ -29,6 +29,14 @@ public class IOEngine {
 
     public IOEngine(GUIController guiController){
         this.guiController = guiController;
+        name = "";
+        hours = null;
+        addresses = null;
+        outputFolder = "";
+        fileCashPayment = null;
+        fileDonation = null;
+        fileOperation = null;
+        fileOperationOverview = null;
     }
 
     public void readAndWriteData(){

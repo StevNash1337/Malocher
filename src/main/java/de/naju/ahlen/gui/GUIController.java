@@ -93,4 +93,26 @@ public class GUIController {
     public void processButtonPressed() {
         ioEngine.readAndWriteData();
     }
+
+    private void setProcessButtonEnablbeIfAllValid(Boolean valid){
+        menuPanel.getbProcess().setEnabled(valid);
+    }
+
+    public boolean validateAllData(){
+        boolean valid = !(ioEngine.getName().equals("")
+                || ioEngine.getAddresses() == null
+                || ioEngine.getHours() == null
+                || ioEngine.getOutputFolder().equals("")
+                || ioEngine.getFileCashPayment() == null
+                || ioEngine.getFileDonation() == null
+                || ioEngine.getFileOperation() == null
+                || ioEngine.getFileOperationOverview() == null);
+
+        setProcessButtonEnablbeIfAllValid(valid);
+        return valid;
+    }
+
+    public void createErrorMessege(){
+
+    }
 }
