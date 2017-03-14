@@ -54,7 +54,7 @@ public class CSVParser implements Parser {
                 // System.out.println(nextLine[0] + nextLine[1] + "etc...");
 
                 // 1. Zeile Datum parsen
-                if (nextLine[0].equals("Name")) {
+                if (nextLine[0].toLowerCase().equals("name")) {
                     for (int i = 1; i < nextLine.length; i++) {
                         DateFormat format = new SimpleDateFormat("dd.MM.yy");
                         Date date = new Date();
@@ -68,12 +68,12 @@ public class CSVParser implements Parser {
                 }
 
                 // Jede weitere Zeile, welche auch nicht leer ist
-                if (!(nextLine[0].equals("Name")) && !(nextLine[0].equals(""))) {
+                if (!(nextLine[0].toLowerCase().equals("name")) && !(nextLine[0].equals(""))) {
                     Person person = new Person();
                     // TODO: genauere Abfrage, Personen könnten gleichen Vornamen haben
                     // Person p aus Personen, welche bereits über die Adressen.csv eingelesen wurden, rausfiltern
                     for (Person p : persons) {
-                        if (p.getFirstName().equals(nextLine[0])) {
+                        if (p.getFirstName().toLowerCase().equals(nextLine[0].toLowerCase())) {
                             person = p;
                         }
                     }
