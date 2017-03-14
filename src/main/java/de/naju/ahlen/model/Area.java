@@ -58,6 +58,32 @@ public class Area {
         return result;
     }
 
+    public Date getStartDate() {
+        SortedSet<Date> dates = new TreeSet<>();
+
+        for (Person p : persons) {
+            for (Operation o : p.getOperations()) {
+                Date date = o.getDate();
+                dates.add(date);
+            }
+        }
+
+        return dates.first();
+    }
+
+    public Date getEndDate() {
+        SortedSet<Date> dates = new TreeSet<>();
+
+        for (Person p : persons) {
+            for (Operation o : p.getOperations()) {
+                Date date = o.getDate();
+                dates.add(date);
+            }
+        }
+
+        return dates.last();
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Name des Gebiets: ")

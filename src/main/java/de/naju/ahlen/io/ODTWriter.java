@@ -4,11 +4,18 @@ import de.naju.ahlen.model.Area;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
 import org.odftoolkit.simple.TextDocument;
+import org.odftoolkit.simple.table.Cell;
 import org.odftoolkit.simple.table.Table;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -73,8 +80,26 @@ public class ODTWriter implements Writer{
     }
 
     private void writeOperationOverview(TextDocument doc, Area area) {
-        writeVariables(doc);
-        Table table = getTable(doc, 2);
+        Map<String, String> mapping = new HashMap<>();
+
+        DecimalFormat format = new DecimalFormat("0.#");
+        format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.GERMAN));
+        String hours_total_string = format.format(area.getHours());
+
+        Date start = area.getStartDate();
+        Date end = area.getEndDate();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.GERMAN);
+
+        String zeitraumString = dateFormat.format(start) + " - " + dateFormat.format(end);
+
+        mapping.put("gebiet", area.getName());
+        mapping.put("zeitraum", zeitraumString);
+        mapping.put("stunden", hours_total_string);
+
+
+        writeVariables(doc, mapping);
+        Table table = getTable(doc, 1);
         Map<Date, Float> hoursByDate = area.getHoursByDate();
         SortedSet<Date> dates = new TreeSet(hoursByDate.keySet());
 
@@ -84,17 +109,36 @@ public class ODTWriter implements Writer{
             throw new IndexOutOfBoundsException("To many rows needed in Overview Template (got " + maxRows + " need " + dates.size() + ").");
         }
 
-        int startRow = 2;
-        for (Date date : dates) {
-            Float hours = hoursByDate.get(date);
+        String style = table.getCellByPosition(0,0).getCellStyleName();
 
-            table.getCellByPosition(1, startRow).setDisplayText(date.toString());
-            table.getCellByPosition(2, startRow).setDisplayText(hours.toString());
+        int startRow = 1;
+        for (Date date : dates) {
+
+            Float hours = hoursByDate.get(date);
+            Double hours_double = hours.doubleValue();
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+
+            Cell cellDate = table.getCellByPosition(0, startRow);
+            cellDate.setCellStyleName(style);
+            cellDate.setValueType("date");
+            cellDate.setDateValue(cal);
+            cellDate.setFormatString("dd.MM.yy");
+
+            Cell cellHours = table.getCellByPosition(1, startRow);
+            cellHours.setCellStyleName(style);
+            cellHours.setValueType("float");
+            cellHours.setDoubleValue(hours_double);
+            cellHours.setFormatString("0.#");
+
             startRow++;
         }
 
         try {
-            doc.save("replacementTest");
+            Path path = Paths.get(outputFolder);
+            path = path.resolve("Stundenachweis.odt");
+            doc.save(path.toFile());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,12 +148,23 @@ public class ODTWriter implements Writer{
 
     }
 
-    private void writeVariables(TextDocument doc) {
+    private void writeVariables(TextDocument doc, Map<String, String> mapping) {
         List<Node> variables = collectVariables(doc);
 
         for (Node node : variables) {
-            System.out.println("variable_name: " + node.getAttributes().getNamedItem("text:name").getNodeValue());
-            System.out.println("variable_value: " + node.getChildNodes().item(0).getNodeValue());
+            String variableName = node.getAttributes().getNamedItem("text:name").getNodeValue();
+            String variableValue = node.getChildNodes().item(0).getNodeValue();
+            System.out.println("variable_name: " + variableName);
+            System.out.println("variable_value: " + variableValue);
+
+            if (mapping.containsKey(variableName)) {
+                String render = mapping.get(variableName);
+                node.getChildNodes().item(0).setNodeValue(render);
+            }
+
+            variableValue = node.getChildNodes().item(0).getNodeValue();
+            System.out.println("variable_name: " + variableName);
+            System.out.println("variable_value: " + variableValue);
         }
     }
 

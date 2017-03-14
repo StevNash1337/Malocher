@@ -45,7 +45,7 @@ public class IOEngine {
 
     private void writeData(Area area){
         writer = new ODTWriter(outputFolder, fileCashPayment, fileDonation, fileOperationOverview, fileOperation);
-        area = new Area();
+        //area = new Area();
         writer.write(area);
     }
 

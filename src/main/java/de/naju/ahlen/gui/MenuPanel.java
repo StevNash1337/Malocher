@@ -203,7 +203,7 @@ public class MenuPanel extends JPanel {
         });
 
         bProcess = new JButton("Verarbeiten");
-        bFileOperation.addActionListener(new ActionListener() {
+        bProcess.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiController.nameNSG(tName.getText());
