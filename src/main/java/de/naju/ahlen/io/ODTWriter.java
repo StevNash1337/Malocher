@@ -1,6 +1,7 @@
 package de.naju.ahlen.io;
 
 import de.naju.ahlen.model.Area;
+import de.naju.ahlen.model.Person;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
 import org.odftoolkit.odfdom.type.Color;
@@ -65,7 +66,7 @@ public class ODTWriter implements Writer{
         // TODO create mapping from variable_name to content
         // TODO fill out tables
         //writeCashPayment(docCashPayment, area);
-        //writeDonation(docDonation, area);
+        writeDonation(docDonation, area);
         writeOperationOverview(docOperationOverview, area);
         //writeOperation(docOperation, area);
     }
@@ -75,7 +76,26 @@ public class ODTWriter implements Writer{
     }
 
     private void writeDonation(TextDocument doc, Area area) {
+        for (Person person : area.getPersons()) {
+            DecimalFormat format = new DecimalFormat("#.##");
 
+            Map <String, String> mapping = new HashMap<>();
+
+            mapping.put("Person", person.getFullName());
+            mapping.put("Spendenempfaenger", "Lucas Camphausen");
+            mapping.put("Betrag", format.format(person.getHours()*10));
+
+            writeVariables(doc, mapping);
+
+            String fileName = "Barspende " + person.getFullName() + ".odt";
+            try {
+                Path path = Paths.get(outputFolder);
+                path = path.resolve(fileName);
+                doc.save(path.toFile());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private Table getTable(TextDocument doc, int index) {

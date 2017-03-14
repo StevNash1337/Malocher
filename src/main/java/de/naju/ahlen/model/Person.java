@@ -74,6 +74,20 @@ public class Person {
         this.operations = operations;
     }
 
+    public String getFullName() {
+        return getFirstName() + " " +getLastName();
+    }
+
+    public float getHours() {
+        float sum = 0.0f;
+
+        for (Operation op : operations) {
+            sum += op.getDuration();
+        }
+
+        return sum;
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Vorname: ")
