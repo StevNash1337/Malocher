@@ -108,8 +108,20 @@ public class GUIController {
                 || ioEngine.getFileOperation() == null
                 || ioEngine.getFileOperationOverview() == null);
 
+        System.out.println("valid for processButton: " + valid);
         setProcessButtonEnablbeIfAllValid(valid);
         return valid;
+    }
+
+    public void printTest(){
+        System.out.println(ioEngine.getName());
+        System.out.println(ioEngine.getAddresses());
+        System.out.println(ioEngine.getHours());
+        System.out.println(ioEngine.getOutputFolder());
+        System.out.println(ioEngine.getFileCashPayment());
+        System.out.println(ioEngine.getFileDonation());
+        System.out.println(ioEngine.getFileOperation());
+        System.out.println(ioEngine.getFileOperationOverview());
     }
 
     public void createErrorMessege(){
