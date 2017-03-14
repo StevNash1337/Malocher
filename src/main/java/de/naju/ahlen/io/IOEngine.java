@@ -40,19 +40,21 @@ public class IOEngine {
     }
 
     public void readAndWriteData(){
-        readData();
-        writeData();
+        Area area = readData();
+        writeData(area);
     }
 
-    private void readData(){
+    private Area readData(){
         parser = new CSVParser();
         area = parser.parse(name, hours, addresses);
         System.out.println(area.toString());
+        return area;
     }
 
-    private void writeData(){
+    private void writeData(Area area){
         writer = new ODTWriter(outputFolder, fileCashPayment, fileDonation, fileOperationOverview, fileOperation);
-        writer.write(new Area());
+        //area = new Area();
+        writer.write(area);
     }
 
     public String getName() {
