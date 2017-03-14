@@ -137,16 +137,17 @@ public class ODTWriter implements Writer{
             //cellHours.setCellStyleName(style);
             //cellHours.setCellStyleName("");
 
-            if (startRow == 0) {
-                cellHours.setValueType("float");
-                cellHours.setDoubleValue(hours_double);
-                cellHours.setFormatString("0.#");
-            } else {
-                //cellHours.setValueType("string");
-                cellHours.setStringValue(format.format(hours_double));
-                cellHours.setFont(font_hand);
-                cellHours.setHorizontalAlignment(StyleTypeDefinitions.HorizontalAlignmentType.CENTER);
-            }
+            // can't remove trailing decimal point
+            //cellHours.setValueType("float");
+            //cellHours.setDoubleValue(hours_double);
+            //cellHours.setFormatString("0.#");
+
+            // TODO find out why the format gets messed up
+            //cellHours.setValueType("string");
+            cellHours.setStringValue(format.format(hours_double));
+            cellHours.setFont(font_hand);
+            cellHours.setHorizontalAlignment(StyleTypeDefinitions.HorizontalAlignmentType.CENTER);
+
             startRow++;
         }
 
