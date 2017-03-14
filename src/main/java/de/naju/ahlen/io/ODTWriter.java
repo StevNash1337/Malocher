@@ -3,7 +3,10 @@ package de.naju.ahlen.io;
 import de.naju.ahlen.model.Area;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
+import org.odftoolkit.odfdom.type.Color;
 import org.odftoolkit.simple.TextDocument;
+import org.odftoolkit.simple.style.Font;
+import org.odftoolkit.simple.style.StyleTypeDefinitions;
 import org.odftoolkit.simple.table.Cell;
 import org.odftoolkit.simple.table.Table;
 import org.w3c.dom.Node;
@@ -17,6 +20,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * Writer implementation for ODT templates
@@ -121,17 +125,28 @@ public class ODTWriter implements Writer{
             cal.setTime(date);
 
             Cell cellDate = table.getCellByPosition(0, startRow);
-            cellDate.setCellStyleName(style);
+            Font font_hand = new Font("Helvetica", StyleTypeDefinitions.FontStyle.REGULAR, 12, Color.BLACK);
+            //cellDate.setCellStyleName(style);
             cellDate.setValueType("date");
             cellDate.setDateValue(cal);
             cellDate.setFormatString("dd.MM.yy");
 
             Cell cellHours = table.getCellByPosition(1, startRow);
-            cellHours.setCellStyleName(style);
-            cellHours.setValueType("float");
-            cellHours.setDoubleValue(hours_double);
-            cellHours.setFormatString("0.#");
+            //String styleBeforeCell = cellHours.getCellStyleName();
+            //String styleBefore = cellHours.getStyleName();
+            //cellHours.setCellStyleName(style);
+            //cellHours.setCellStyleName("");
 
+            if (startRow == 0) {
+                cellHours.setValueType("float");
+                cellHours.setDoubleValue(hours_double);
+                cellHours.setFormatString("0.#");
+            } else {
+                //cellHours.setValueType("string");
+                cellHours.setStringValue(format.format(hours_double));
+                cellHours.setFont(font_hand);
+                cellHours.setHorizontalAlignment(StyleTypeDefinitions.HorizontalAlignmentType.CENTER);
+            }
             startRow++;
         }
 
