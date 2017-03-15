@@ -229,7 +229,7 @@ public class ODTWriter implements Writer{
 
         int startRow = 1;
         for (Date date : dates) {
-
+            // TODO benutze echte Beschreibung, noch nicht im m Odel vorhanden
             String arbeitBeschreibung = "chillen";
 
             Float hours = hoursByDate.get(date);
@@ -294,6 +294,7 @@ public class ODTWriter implements Writer{
 
             Float dateSum = area.getHoursByDate().get(date);
 
+            // TODO Benutze echte beschreibung, noch nicht im model vorhanden
             mapping.put("Taetigkeit", "chillen");
             mapping.put("Datum", dateFormat.format(date));
 
