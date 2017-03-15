@@ -58,6 +58,23 @@ public class Area {
         return result;
     }
 
+    public Map<Date, List<Person>> getPersonsByDate() {
+        Map<Date, List<Person>> result = new HashMap<>();
+
+        for (Person p : persons) {
+            for (Operation o : p.getOperations()) {
+                Date date = o.getDate();
+                if (!result.containsKey(date)) {
+                    result.put(date, new ArrayList<>());
+                    result.get(date).add(p);
+                } else if (!result.get(date).contains(p)) {
+                    result.get(date).add(p);
+                }
+            }
+        }
+        return result;
+    }
+
     public Date getStartDate() {
         SortedSet<Date> dates = new TreeSet<>();
 

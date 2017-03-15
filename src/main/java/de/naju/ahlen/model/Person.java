@@ -2,8 +2,7 @@ package de.naju.ahlen.model;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Steffen on 08.03.2017.
@@ -78,6 +77,10 @@ public class Person {
         return getFirstName() + " " +getLastName();
     }
 
+    public String getFullAddtess() {
+        return address + ", " + postCode + " " + city;
+    }
+
     public float getHours() {
         float sum = 0.0f;
 
@@ -86,6 +89,21 @@ public class Person {
         }
 
         return sum;
+    }
+
+    public Map<Date, Float> getHoursByDate() {
+        Map<Date, Float> result = new HashMap<>();
+
+        for (Operation o : operations) {
+            Date date = o.getDate();
+            float duration = o.getDuration();
+            if (result.containsKey(date)) {
+                System.out.println("Person " + getFirstName() + " worked multiple times on " + date);
+            } else {
+                result.put(date, duration);
+            }
+        }
+        return result;
     }
 
     public String toString(){
