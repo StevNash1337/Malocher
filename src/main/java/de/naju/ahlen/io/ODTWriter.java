@@ -2,7 +2,6 @@ package de.naju.ahlen.io;
 
 import de.naju.ahlen.model.Area;
 import de.naju.ahlen.model.Person;
-import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
 import org.odftoolkit.odfdom.type.Color;
 import org.odftoolkit.simple.TextDocument;
@@ -30,6 +29,7 @@ import java.util.List;
 public class ODTWriter implements Writer{
 
     // TODO disable info logging from odfdom
+    // TODO create subfolders automatically
 
     private final String VARIABLE_NODE_NAME = "text:variable-set";
     private final String VARIABLE_NODE_CONTENT = "text:name";
@@ -227,10 +227,12 @@ public class ODTWriter implements Writer{
 
         String style = table.getCellByPosition(0,0).getCellStyleName();
 
+        Map<Date, String> operationDescriptions = area.getOpeartionDescriptionByDate();
+
         int startRow = 1;
         for (Date date : dates) {
             // TODO benutze echte Beschreibung, noch nicht im m Odel vorhanden
-            String arbeitBeschreibung = "chillen";
+            String arbeitBeschreibung = operationDescriptions.get(date);
 
             Float hours = hoursByDate.get(date);
             Double hours_double = hours.doubleValue();
@@ -289,14 +291,17 @@ public class ODTWriter implements Writer{
         Map<Date, List<Person>> personsByDate = area.getPersonsByDate();
         SortedSet<Date> dates = new TreeSet(personsByDate.keySet());
 
+        Map<Date, String> operationDescriptions = area.getOpeartionDescriptionByDate();
         for (Date date : dates) {
             Map<String, String> mapping = new HashMap<>();
 
             Float dateSum = area.getHoursByDate().get(date);
 
-            // TODO Benutze echte beschreibung, noch nicht im model vorhanden
-            mapping.put("Taetigkeit", "chillen");
             mapping.put("Datum", dateFormat.format(date));
+            // TODO Benutze echte beschreibung, noch nicht im model vorhanden
+            mapping.put("Taetigkeit", operationDescriptions.get(date));
+
+
 
             Table table = getTable(doc, 0);
             List<Person> persons = personsByDate.get(date);
@@ -349,7 +354,7 @@ public class ODTWriter implements Writer{
                 cellName.setHorizontalAlignment(StyleTypeDefinitions.HorizontalAlignmentType.LEFT);
 
                 Cell cellAnschrift = table.getCellByPosition(2, startRow);
-                cellAnschrift.setStringValue(p.getFullAddtess());
+                cellAnschrift.setStringValue(p.getFullAddress());
                 cellAnschrift.setFont(font_hand);
                 cellAnschrift.setHorizontalAlignment(StyleTypeDefinitions.HorizontalAlignmentType.LEFT);
 

@@ -75,6 +75,25 @@ public class Area {
         return result;
     }
 
+    /**
+     *
+     * @return return the comment of the first Operation found for each date
+     */
+    public Map<Date, String> getOpeartionDescriptionByDate() {
+        Map<Date, String> result = new HashMap<>();
+
+        for (Person p : persons) {
+            for (Operation o : p.getOperations()) {
+                Date date = o.getDate();
+                if (!result.containsKey(date)) {
+                    result.put(date, o.getComment());
+                }
+            }
+
+        }
+        return result;
+    }
+
     public Date getStartDate() {
         SortedSet<Date> dates = new TreeSet<>();
 

@@ -66,20 +66,20 @@ public class CSVParser implements Parser {
                     }
                 }
 
-                // 2. Zeile Datum parsen
-                if (nextLine[1].equals("__ARBEIT__")) {
+                // 2. Zeile Beschreibung parsen
+                if (nextLine[0].equals("__ARBEIT__")) {
                     for (int i = 1; i < nextLine.length; i++) {
                         listOperationWork.add(nextLine[i]);
                     }
                 }
 
                 // Jede weitere Zeile, welche auch nicht leer ist
-                if (!(nextLine[0].toLowerCase().equals("name")) && !(nextLine[0].equals(""))) {
+                if (!(nextLine[0].toLowerCase().equals("name")) && !(nextLine[0].toLowerCase().equals("__arbeit__")) && !(nextLine[0].equals(""))) {
                     Person person = new Person();
                     // TODO: genauere Abfrage, Personen könnten gleichen Vornamen haben
                     // Person p aus Personen, welche bereits über die Adressen.csv eingelesen wurden, rausfiltern
                     for (Person p : persons) {
-                        if (p.getFirstName().toLowerCase().equals(nextLine[0].toLowerCase())) {
+                        if (p.getFullName().toLowerCase().equals(nextLine[0].toLowerCase())) {
                             person = p;
                         }
                     }

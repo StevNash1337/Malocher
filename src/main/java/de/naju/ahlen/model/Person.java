@@ -77,7 +77,7 @@ public class Person {
         return getFirstName() + " " +getLastName();
     }
 
-    public String getFullAddtess() {
+    public String getFullAddress() {
         return address + ", " + postCode + " " + city;
     }
 
