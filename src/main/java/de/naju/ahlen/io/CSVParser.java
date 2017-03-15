@@ -41,6 +41,7 @@ public class CSVParser implements Parser {
         try {
             int maxOperations;
             List<Date> listOperationDates = new ArrayList<>();
+            List<String> listOperationWork = new ArrayList<>();
             area.setName(name);
 
             reader = new CSVReader(new FileReader(fileHours), '\t');
@@ -50,8 +51,6 @@ public class CSVParser implements Parser {
                 if (nextLine[0].isEmpty()) {
                     break;
                 }
-                // nextLine[] is an array of values from the line
-                // System.out.println(nextLine[0] + nextLine[1] + "etc...");
 
                 // 1. Zeile Datum parsen
                 if (nextLine[0].toLowerCase().equals("name")) {
@@ -64,6 +63,13 @@ public class CSVParser implements Parser {
                             e.printStackTrace();
                         }
                         listOperationDates.add(date);
+                    }
+                }
+
+                // 2. Zeile Datum parsen
+                if (nextLine[1].equals("__ARBEIT__")) {
+                    for (int i = 1; i < nextLine.length; i++) {
+                        listOperationWork.add(nextLine[i]);
                     }
                 }
 
@@ -89,7 +95,7 @@ public class CSVParser implements Parser {
                             duration = duration.replace(",", ".");
                         }
                         op.setDuration(Float.parseFloat(duration));
-                        op.setComment("");
+                        op.setComment(listOperationWork.get(i-1));
                         person.getOperations().add(op);
 
                         // Set duration in Area
