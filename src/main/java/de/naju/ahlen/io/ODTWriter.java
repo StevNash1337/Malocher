@@ -3,8 +3,13 @@ package de.naju.ahlen.io;
 import de.naju.ahlen.model.Area;
 import de.naju.ahlen.model.Person;
 import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
+import org.odftoolkit.odfdom.dom.element.text.TextUserFieldDeclElement;
+import org.odftoolkit.odfdom.pkg.OdfElement;
 import org.odftoolkit.odfdom.type.Color;
 import org.odftoolkit.simple.TextDocument;
+import org.odftoolkit.simple.common.navigation.InvalidNavigationException;
+import org.odftoolkit.simple.common.navigation.TextNavigation;
+import org.odftoolkit.simple.common.navigation.TextSelection;
 import org.odftoolkit.simple.style.Font;
 import org.odftoolkit.simple.style.StyleTypeDefinitions;
 import org.odftoolkit.simple.table.Cell;
@@ -30,16 +35,17 @@ public class ODTWriter implements Writer{
 
     // TODO disable info logging from odfdom
     // TODO create subfolders automatically
+    // TODO variables don't work. Use normal text replacement, need to open template multiple times then
 
     private final String VARIABLE_NODE_NAME = "text:variable-set";
     private final String VARIABLE_NODE_CONTENT = "text:name";
 
     private String outputFolder;
 
-    private TextDocument docCashPayment;
-    private TextDocument docDonation;
-    private TextDocument docOperationOverview;
-    private TextDocument docOperation;
+    private File docCashPayment;
+    private File docDonation;
+    private File docOperationOverview;
+    private File docOperation;
 
     private Date auszahlungsDatum;
 
@@ -55,13 +61,22 @@ public class ODTWriter implements Writer{
         this.outputFolder = outputFolder;
         auszahlungsDatum = new Date();
         try {
-            docCashPayment = TextDocument.loadDocument(fileCashPayment);
-            docDonation = TextDocument.loadDocument(fileDonation);
-            docOperation = TextDocument.loadDocument(fileOperation);
-            docOperationOverview = TextDocument.loadDocument(fileOperationOverview);
+            docCashPayment = fileCashPayment;
+            docDonation = fileDonation;
+            docOperation = fileOperation;
+            docOperationOverview = fileOperationOverview;
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private TextDocument loadDocument(File file) {
+        try {
+            return TextDocument.loadDocument(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -74,7 +89,7 @@ public class ODTWriter implements Writer{
         writeOperation(docOperation, area);
     }
 
-    private void writeCashPayment(TextDocument doc, Area area) {
+    private void writeCashPayment(File file, Area area) {
         DecimalFormat format = new DecimalFormat("0.#");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.GERMAN));
 
@@ -86,14 +101,18 @@ public class ODTWriter implements Writer{
             String hourString = format.format(person.getHours());
             String betrag = format.format(person.getHours()*10);
 
-            mapping.put("Person", person.getFullName());
-            mapping.put("NSG", area.getName());
-            mapping.put("Summe", hourString);
-            mapping.put("Betrag", betrag);
-            mapping.put("Datum", dateFormat.format(auszahlungsDatum));
+            mapping.put("<<Person>>", person.getFullName());
+            mapping.put("<<NSG>>", area.getName());
+            mapping.put("<<Summe>>", hourString);
+            mapping.put("<<Betrag>>", betrag);
+            mapping.put("<<Datum>>", dateFormat.format(auszahlungsDatum));
 
-            writeVariables(doc, mapping);
+            TextDocument doc = loadDocument(file);
+            if (doc == null) {
+                return;
+            }
 
+            writeVariables_(doc, mapping);
             Table table = getTable(doc, 0);
 
             Map<Date, Float> hoursByDate = person.getHoursByDate();
@@ -166,17 +185,24 @@ public class ODTWriter implements Writer{
 
     }
 
-    private void writeDonation(TextDocument doc, Area area) {
+    private void writeDonation(File file, Area area) {
         for (Person person : area.getPersons()) {
             DecimalFormat format = new DecimalFormat("#.##");
 
             Map <String, String> mapping = new HashMap<>();
 
-            mapping.put("Person", person.getFullName());
-            mapping.put("Spendenempfaenger", "Lucas Camphausen");
-            mapping.put("Betrag", format.format(person.getHours()*10));
+            mapping.put("<<Person>>", person.getFullName());
+            // TODO füge Feld in GUI ein um Verantwortlichen zu setzen
+            // TODO Warnung, falls beide Personen gleich sind
+            mapping.put("<<Spendenempfaenger>>", "Lucas Camphausen");
+            mapping.put("<<Betrag>>", format.format(person.getHours()*10));
 
-            writeVariables(doc, mapping);
+            TextDocument doc = loadDocument(file);
+
+            if (doc == null) {
+                return;
+            }
+            writeVariables_(doc, mapping);
 
             String fileName = "Barspende " + person.getFullName() + ".odt";
             try {
@@ -195,7 +221,7 @@ public class ODTWriter implements Writer{
         return tables.get(index);
     }
 
-    private void writeOperationOverview(TextDocument doc, Area area) {
+    private void writeOperationOverview(File file, Area area) {
         Map<String, String> mapping = new HashMap<>();
 
         DecimalFormat format = new DecimalFormat("0.#");
@@ -209,12 +235,17 @@ public class ODTWriter implements Writer{
 
         String zeitraumString = dateFormat.format(start) + " - " + dateFormat.format(end);
 
-        mapping.put("gebiet", area.getName());
-        mapping.put("zeitraum", zeitraumString);
-        mapping.put("stunden", hours_total_string);
+        mapping.put("<<NSG>>", area.getName());
+        mapping.put("<<Zeitraum>>", zeitraumString);
+        mapping.put("<<Stunden>>", hours_total_string);
 
+        TextDocument doc = loadDocument(file);
 
-        writeVariables(doc, mapping);
+        if (doc == null) {
+            return;
+        }
+
+        writeVariables_(doc, mapping);
         Table table = getTable(doc, 1);
         Map<Date, Float> hoursByDate = area.getHoursByDate();
         SortedSet<Date> dates = new TreeSet(hoursByDate.keySet());
@@ -281,7 +312,7 @@ public class ODTWriter implements Writer{
         }
     }
 
-    private void writeOperation(TextDocument doc, Area area) {
+    private void writeOperation(File file, Area area) {
         DecimalFormat format = new DecimalFormat("0.#");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.GERMAN));
 
@@ -297,11 +328,15 @@ public class ODTWriter implements Writer{
 
             Float dateSum = area.getHoursByDate().get(date);
 
-            mapping.put("Datum", dateFormat.format(date));
+            mapping.put("<<Datum>>", dateFormat.format(date));
             // TODO Benutze echte beschreibung, noch nicht im model vorhanden
-            mapping.put("Taetigkeit", operationDescriptions.get(date));
+            mapping.put("<<Taetigkeit>>", operationDescriptions.get(date));
 
+            TextDocument doc = loadDocument(file);
 
+            if (doc == null) {
+                return;
+            }
 
             Table table = getTable(doc, 0);
             List<Person> persons = personsByDate.get(date);
@@ -361,9 +396,9 @@ public class ODTWriter implements Writer{
                 startRow++;
             }
 
-            mapping.put("Summe", format.format(hoursTotal));
+            mapping.put("<<Summe>>", format.format(hoursTotal));
 
-            writeVariables(doc, mapping);
+            writeVariables_(doc, mapping);
 
 
             String fileName = "Tagesnachweis " + dateFormat.format(date) + ".odt";
@@ -399,6 +434,26 @@ public class ODTWriter implements Writer{
             System.out.println("variable_value: " + variableValue);
         }
     }
+
+    private void writeVariables_(TextDocument doc, Map<String, String> mapping) {
+        for (String template : mapping.keySet()) {
+            String replacement = mapping.get(template);
+            TextNavigation search = new TextNavigation(template, doc);
+
+            while (search.hasNext()) {
+                TextSelection item = (TextSelection) search.nextSelection();
+
+                try {
+                    item.replaceWith(replacement);
+                } catch (InvalidNavigationException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+    }
+
 
     private List<Node> collectVariables(TextDocument doc) {
         List<Node> vars = new ArrayList<>();
